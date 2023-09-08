@@ -1,6 +1,5 @@
 package com.example.comatching_be.register;
 
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +22,8 @@ public class RegisterService {
 		userInfo.setSong(req.getSong());
 		userInfo.setYear(req.getYear());
 		userInfo.setMbti(req.getMbti());
+		userInfo.setChance(1);
+		userInfo.setChoose(0);
 		userInfoRepository.save(userInfo);
 		RegisterRes registerRes = new RegisterRes();
 		registerRes.setA(1);
