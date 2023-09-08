@@ -38,7 +38,7 @@ public class UserInfo {
 
 	private String mbti;
 
-	private Boolean choose;
+	private Integer choose;
 
 	private Integer chance;
 }
