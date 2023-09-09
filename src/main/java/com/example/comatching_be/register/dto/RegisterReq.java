@@ -22,7 +22,7 @@ public class RegisterReq { //모든 데이터 NULL Blank 허용x
 	private String phone;
 
 	@NotBlank(message = "학과명 - 빈칸일 수 없습니다")
-	@Size(min=4, max=15, message="학과명 - 최대 길이는 13글자 입니다.")
+	@Size(min=1, max=15, message="학과명 - 최대 길이는 13글자 입니다.")
 	private String depart;
 
 	@NotBlank(message = "노래제목 - 빈칸일 수 없습니다")

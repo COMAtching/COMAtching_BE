@@ -8,5 +8,6 @@ import com.example.comatching_be.domain.UserInfo;
 
 public interface UserInfoRepository extends JpaRepository<UserInfo, Long> {
 	UserInfo findByPhone(String phone);
+	Boolean existsByPhone(String phone);
 
 }
