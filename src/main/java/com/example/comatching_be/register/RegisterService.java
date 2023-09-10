@@ -34,7 +34,7 @@ public class RegisterService {
 		userInfo.setPasswd(passwd);
 		userInfoRepository.save(userInfo);
 		RegisterRes registerRes = new RegisterRes();
-		registerRes.setA(1);
+		registerRes.setPasswd(passwd);
 		return registerRes;
 	}
 
