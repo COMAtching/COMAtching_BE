@@ -15,7 +15,8 @@ import lombok.Setter;
 
 @Entity
 @Data
-@Getter @Setter
+@Getter
+@Setter
 @Table(name = "user_info")
 public class UserInfo {
 
@@ -26,19 +27,24 @@ public class UserInfo {
 
 	private Boolean gender; //True = male False = female
 
-	@Column(length=11, unique = true)
+	@Column(length = 11, unique = true)
 	private String phone;
 
-	@Column(length=15)
+	@Column(length = 15)
 	private String depart;
 
+	@Column(length = 30)
 	private String song;
 
 	private Integer year;
 
+	@Column(length = 4)
 	private String mbti;
 
 	private Integer choose;
 
 	private Integer chance;
+
+	@Column(length = 6)
+	private String passwd;
 }
