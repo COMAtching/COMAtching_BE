@@ -3,7 +3,6 @@ package com.example.comatching_be.register;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.Errors;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,7 +24,6 @@ public class RegisterController {
 		return new BaseResponse<>(ex);
 	}
 
-
 	@Autowired
 	private RegisterService registerService;
 
@@ -33,13 +31,13 @@ public class RegisterController {
 	private PhoneCheckService phoneCheckService;
 
 	@PostMapping("/register")
-	public BaseResponse<RegisterRes> registerUser(@RequestBody @Valid RegisterReq req){
+	public BaseResponse<RegisterRes> registerUser(@RequestBody @Valid RegisterReq req) {
 		RegisterRes registerRes = registerService.registerUser(req);
 		return new BaseResponse<>(registerRes);
 	}
 
 	@GetMapping("/register")
-	public Boolean checkPhone(@RequestParam String phone){
+	public Boolean checkPhone(@RequestParam String phone) {
 		return phoneCheckService.checkPhone(phone);
 	}
 }

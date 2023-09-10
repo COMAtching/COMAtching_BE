@@ -10,7 +10,7 @@ public class PhoneCheckService {
 	@Autowired
 	private UserInfoRepository userInfoRepository;
 
-	public Boolean checkPhone(String phone){
+	public Boolean checkPhone(String phone) {
 		Boolean exist = userInfoRepository.existsByPhone(phone);
 		return exist;
 	}
