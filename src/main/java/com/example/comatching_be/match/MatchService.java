@@ -18,7 +18,7 @@ public class MatchService {
 	@Autowired
 	UserInfoRepository userInfoRepository;
 
-	private String passwd;
+	private String choosePasswd;
 
 	public BaseResponse<MatchRes> matching(MatchReq req) {
 		String mbti = req.getMbti();
@@ -50,18 +50,18 @@ public class MatchService {
 				return response;
 			}
 			response.setStatus(BaseResponseStatus.FAIL_MBTI_MATCH);
-			userInfoRepository.updateChoose(passwd, 0);
+			System.out.println(choosePasswd);
 			result = pickPartnerAsResponse(candidate, req.getPasswd());
 		} else {
 			result = pickPartnerAsResponse(candidate, req.getPasswd());
-			userInfoRepository.updateChoose(passwd, 0);
+			System.out.println(choosePasswd);
 			response.setResult(result);
 		}
 
 		System.out.println(candidate);
 		System.out.println(result);
-
-		userInfoRepository.updateChoose(passwd, 0);
+		System.out.println(choosePasswd);
+		userInfoRepository.updateChoose(choosePasswd, 0);
 		return response;
 
 	}
@@ -84,8 +84,8 @@ public class MatchService {
 		result.setYear(matchPartner.getYear());
 		result.setDepart(matchPartner.getDepart());
 		result.setGender(matchPartner.getGender());
-		passwd = matchPartner.getPasswd();
+		choosePasswd = matchPartner.getPasswd();
 		return result;
 	}
-
+	
 }
