@@ -5,9 +5,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.validation.constraints.NotBlank;
-
-import org.springframework.validation.annotation.Validated;
 
 import lombok.Data;
 import lombok.Getter;
@@ -27,7 +24,7 @@ public class UserInfo {
 
 	private Boolean gender; //True = male False = female
 
-	@Column(length = 11, unique = true)
+	@Column(length = 30, unique = true)
 	private String phone;
 
 	@Column(length = 15)
