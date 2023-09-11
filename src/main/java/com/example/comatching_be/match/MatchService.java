@@ -32,9 +32,9 @@ public class MatchService {
 		System.out.println(gender);
 
 		System.out.println(ei + jp);
-		if (ei.equals("Z") && jp.equals("Z")) {
+		if (ei.equals("Z") && jp.equals("X")) {
 			candidate = userInfoRepository.findByGenderAndChoose(gender, 1);
-		} else if (jp.equals("Z")) {
+		} else if (jp.equals("X")) {
 			candidate = userInfoRepository.findByMbtiStartingWithAndGenderAndChoose(ei, gender, 1);
 		} else if (ei.equals("Z")) {
 			candidate = userInfoRepository.findByMbtiEndingWithAndGenderAndChoose(jp, gender, 1);
