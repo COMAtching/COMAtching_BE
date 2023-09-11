@@ -40,4 +40,9 @@ public class RegisterController {
 	public Boolean checkPhone(@RequestParam String phone) {
 		return phoneCheckService.checkPhone(phone);
 	}
+
+	@GetMapping("/register_result")
+	public String sendPassword(@RequestParam String password) {
+		return password;
+	}
 }

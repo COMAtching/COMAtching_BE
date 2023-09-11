@@ -87,5 +87,5 @@ public class MatchService {
 		choosePasswd = matchPartner.getPasswd();
 		return result;
 	}
-
+	
 }
