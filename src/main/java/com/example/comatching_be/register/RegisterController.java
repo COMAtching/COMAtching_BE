@@ -2,6 +2,7 @@ package com.example.comatching_be.register;
 
 import javax.validation.Valid;
 
+import com.example.comatching_be.util.BaseResponseStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -33,6 +34,11 @@ public class RegisterController {
 	@PostMapping("/register")
 	public BaseResponse<RegisterRes> registerUser(@RequestBody @Valid RegisterReq req) {
 		RegisterRes registerRes = registerService.registerUser(req);
+		if (registerRes.getPasswd().equals("FAIL")){
+			BaseResponse<RegisterRes> departFailRes =  new BaseResponse<>(registerRes);
+			departFailRes.setStatus(BaseResponseStatus.FAIL_REGISTER_NO_DEPART);
+			return departFailRes;
+		}
 		return new BaseResponse<>(registerRes);
 	}
 
