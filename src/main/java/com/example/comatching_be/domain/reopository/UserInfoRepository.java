@@ -25,6 +25,8 @@ public interface UserInfoRepository extends JpaRepository<UserInfo, Long> {
 
 	List<UserInfo> findByGenderAndChoose(Boolean gender, Integer choose);
 
+	Integer countBy();
+
 	@Modifying(clearAutomatically = true, flushAutomatically = true)
 	@Query(value = "UPDATE user_info u set u.choose = :choose where u.passwd = :passwd", nativeQuery = true)
 	void updateChoose(@Param(value = "passwd") String passwd, @Param(value = "choose") int a);
