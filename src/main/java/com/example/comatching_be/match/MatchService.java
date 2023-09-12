@@ -36,8 +36,23 @@ public class MatchService {
 		MatchRes result;
 		Boolean gender = req.getGender();
 		BaseResponse<MatchRes> response = new BaseResponse<>(BaseResponseStatus.SUCCESS);
-		UserInfo reqUserInfo = new UserInfo();
-		UserInfo resUserInfo = new UserInfo();
+
+		//매칭 5회 초과시 예외처리
+		UserInfo userinfo_temp = userInfoRepository.findAllByPasswd(req.getPasswd());
+		Integer acc = userinfo_temp.getChanceAccrue();
+		if (acc == 5) {
+			response = new BaseResponse<>(BaseResponseStatus.FAIL_ACCRUE_OVER);
+			return response;
+		}
+
+		Integer reqUserChance = userinfo_temp.getChance();
+		if (reqUserChance < 1) {
+			response = new BaseResponse<>(BaseResponseStatus.FAIL_NOT_BUY_CHANCE);
+			return response;
+		}
+
+		UserInfo reqUserInfo;
+		UserInfo resUserInfo;
 
 		//MBTI 조건별 후보 List 조회
 		System.out.println(ei + jp);
@@ -55,13 +70,14 @@ public class MatchService {
 		//조건에 맞지 않는 경우 처리
 		System.out.println(candidate);
 		if (candidate.isEmpty()) {
-			candidate = userInfoRepository.findByGenderAndChoose(gender, 1);
+			candidate = userInfoRepository.findByGenderAndChooseGreaterThan(gender, 0);
 			if (candidate.isEmpty()) {
 				response.setStatus(BaseResponseStatus.FAIL_NO_MATCH);
 				return response;
 			}
 			response.setStatus(BaseResponseStatus.FAIL_MBTI_MATCH);
 			result = pickPartnerAsResponse(candidate, req.getPasswd());
+			response.setResult(result);
 		} else {
 			result = pickPartnerAsResponse(candidate, req.getPasswd());
 			response.setResult(result);
@@ -107,6 +123,7 @@ public class MatchService {
 		matchInfo.setMatcherId(matcherId);
 		matchInfoRepository.saveAndFlush(matchInfo);
 		userInfo.addMatchInfo(matchInfo);
+		userInfo.setChanceAccrue(userInfo.getChanceAccrue() + 1);
 		System.out.println("userinfo: " + userInfo);
 		return userInfo;
 	}

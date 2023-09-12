@@ -58,4 +58,6 @@ public class UserInfo {
 	public void addMatchInfo(MatchInfo matchInfo) {
 		matchInfos.add(matchInfo);
 	}
+
+	private Integer chanceAccrue;
 }

@@ -50,6 +50,7 @@ public class RegisterService {
 		userInfo.setChance(0);
 		userInfo.setChoose(1);
 		userInfo.setPasswd(passwd);
+		userInfo.setChanceAccrue(0);
 		userInfoRepository.save(userInfo);
 		RegisterRes registerRes = new RegisterRes();
 		registerRes.setPasswd(passwd);

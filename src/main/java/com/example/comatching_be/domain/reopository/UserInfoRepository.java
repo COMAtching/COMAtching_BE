@@ -14,13 +14,15 @@ public interface UserInfoRepository extends JpaRepository<UserInfo, Long> {
 
 	UserInfo findAllById(Long id);
 
-	UserInfo findByPhone(String phone);
+	UserInfo findAllByPhone(String phone);
 
 	Boolean existsByPhone(String phone);
 
 	Boolean existsByPasswd(String passwd);
 
 	UserInfo findAllByPasswd(String passwd);
+
+	Integer findChanceAccrueByPasswd(String passwd);
 
 	List<MatchInfo> findMatchInfosByPasswd(String passwd);
 
