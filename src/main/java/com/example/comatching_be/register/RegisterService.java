@@ -48,7 +48,7 @@ public class RegisterService {
 		userInfo.setYear(req.getYear());
 		userInfo.setMbti(req.getMbti());
 		userInfo.setChance(0);
-		userInfo.setChoose(1);
+		userInfo.setChoose(2);
 		userInfo.setPasswd(passwd);
 		userInfoRepository.save(userInfo);
 		RegisterRes registerRes = new RegisterRes();
