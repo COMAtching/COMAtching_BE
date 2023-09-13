@@ -28,8 +28,10 @@ public class AdminService {
 	}
 
 	public String updateChanceChoose(AdminReq req) {
-		System.out.println(req.getPasswd());
 		UserInfo userInfo = userInfoRepository.findAllByPasswd(req.getPasswd());
+		if (userInfo == null) {
+			return "없는 코드 입니다";
+		}
 		if ((userInfo.getChance() + req.getChance()) > 5) {
 			return "현재 Pick Someone: " + userInfo.getChance().toString() + "입니다. 최대 5번까지 등록 가능합니다.";
 		} else {

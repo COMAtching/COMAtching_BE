@@ -28,7 +28,7 @@ public class InquiryService {
 		matchInfos = matchInfoRepository.findAllByUserId(reqUserId);
 		UserInfo userInfo_temp;
 
-		System.out.println("matchInfos --->" + matchInfos);
+		//System.out.println("matchInfos --->" + matchInfos);
 
 		if (matchInfos.isEmpty()) {
 			return inquiryRes;
@@ -37,11 +37,10 @@ public class InquiryService {
 			userInfo_temp = userInfoRepository.findAllById(matchInfo_temp.getMatcherId());
 			InquiryRes inquiryRes_temp = new InquiryRes(userInfo_temp.getPhone(), userInfo_temp.getDepart(),
 				userInfo_temp.getSong(), userInfo_temp.getMbti(), userInfo_temp.getYear());
-			System.out.println("inquiryRes_temp " + inquiryRes_temp);
+			//System.out.println("inquiryRes_temp " + inquiryRes_temp);
 			inquiryRes.add(inquiryRes_temp);
 		}
 		System.out.println("inquiryService: " + inquiryRes);
-
 		return inquiryRes;
 	}
 }

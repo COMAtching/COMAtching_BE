@@ -68,7 +68,7 @@ public class MatchService {
 		}
 
 		//조건에 맞지 않는 경우 처리
-		System.out.println(candidate);
+		//System.out.println(candidate);
 		if (candidate.isEmpty()) {
 			candidate = userInfoRepository.findByGenderAndChooseGreaterThan(gender, 0);
 			if (candidate.isEmpty()) {
@@ -83,10 +83,11 @@ public class MatchService {
 			response.setResult(result);
 		}
 
-		reqUserInfo = addMatcher(chosenIdx, req.getPasswd());
+		reqUserInfo = addMatcherSetChangeAndAccrue(chosenIdx, req.getPasswd());
 		resUserInfo = updateChoose(choosePasswd);
 		userInfoRepository.saveAndFlush(reqUserInfo);
 		userInfoRepository.saveAndFlush(resUserInfo);
+		System.out.println("matchService: " + response.getResult());
 		return response;
 	}
 
@@ -111,12 +112,14 @@ public class MatchService {
 		result.setGender(matchPartner.getGender());
 		choosePasswd = matchPartner.getPasswd();
 		chosenIdx = matchPartner.getId();
-		System.out.println(chosenIdx);
+		//System.out.println(chosenIdx);
+
 		return result;
 	}
 
 	@Transactional
-	public UserInfo addMatcher(Long matcherId, String passwd) { //UserInfo 테이블에 매칭상대 리스트 추가
+	public UserInfo addMatcherSetChangeAndAccrue(Long matcherId,
+		String passwd) { //UserInfo 테이블에 매칭상대 리스트 추가 Chance 감소 Acc 증가
 		UserInfo userInfo = userInfoRepository.findAllByPasswd(passwd);
 		MatchInfo matchInfo = new MatchInfo();
 		matchInfo.setUserId(userInfo.getId());
@@ -124,7 +127,8 @@ public class MatchService {
 		matchInfoRepository.saveAndFlush(matchInfo);
 		userInfo.addMatchInfo(matchInfo);
 		userInfo.setChanceAccrue(userInfo.getChanceAccrue() + 1);
-		System.out.println("userinfo: " + userInfo);
+		userInfo.setChance(userInfo.getChance() - 1);
+		//System.out.println("userinfo: " + userInfo);
 		return userInfo;
 	}
 
@@ -134,4 +138,5 @@ public class MatchService {
 		userInfo.setChoose(userInfo.getChoose() - 1);
 		return userInfo;
 	}
+
 }

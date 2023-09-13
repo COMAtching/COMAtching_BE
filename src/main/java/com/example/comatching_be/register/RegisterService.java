@@ -54,6 +54,7 @@ public class RegisterService {
 		userInfoRepository.save(userInfo);
 		RegisterRes registerRes = new RegisterRes();
 		registerRes.setPasswd(passwd);
+		System.out.println("registerService=====" + registerRes);
 		return registerRes;
 	}
 
