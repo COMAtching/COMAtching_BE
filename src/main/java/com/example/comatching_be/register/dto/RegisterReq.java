@@ -23,7 +23,7 @@ public class RegisterReq { //모든 데이터 NULL Blank 허용x
 	private String depart;
 
 	@NotBlank(message = "노래제목 - 빈칸일 수 없습니다")
-	@Pattern(regexp = "^[ㄱ-ㅎ가-힣a-zA-Z0-9\\s]+$", message = "좋아하는 노래는 특수문자가 입력이 불가능합니다") //특수 문자제외 공백,알파벳,한글만 가능
+	@Pattern(regexp = "^[ㄱ-ㅎ가-힣a-zA-Z0-9\\s,.-]+$", message = "좋아하는 노래는 특수문자가 입력이 불가능합니다") //특수 문자제외 공백,알파벳,한글만 가능
 	@Size(max = 30, message = "노래제목 - 최대 길이는 30글자 입니다.")
 	private String song;
 

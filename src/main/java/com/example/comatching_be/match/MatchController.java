@@ -18,7 +18,7 @@ public class MatchController {
 	@Autowired
 	private MatchService matchService;
 
-	@GetMapping("match")
+	@GetMapping("/match")
 	public BaseResponse<MatchRes> matching(@ModelAttribute MatchReq req) {
 		BaseResponse<MatchRes> result = matchService.matching(req);
 		return result;
