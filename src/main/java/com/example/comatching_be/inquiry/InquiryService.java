@@ -41,6 +41,7 @@ public class InquiryService {
 			inquiryRes.add(inquiryRes_temp);
 		}
 		System.out.println("inquiryService: " + inquiryRes);
+		System.out.println("test");
 		return inquiryRes;
 	}
 }
