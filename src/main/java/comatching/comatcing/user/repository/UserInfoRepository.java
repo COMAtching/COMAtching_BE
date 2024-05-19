@@ -7,4 +7,6 @@ import comatching.comatcing.user.entity.UserInfo;
 
 public interface UserInfoRepository extends JpaRepository<UserInfo, Long> {
 	UserInfo findByUsername(@Param("username") String username);
+
+	Boolean existsByContactId(@Param("contactId") String contactId);
 }

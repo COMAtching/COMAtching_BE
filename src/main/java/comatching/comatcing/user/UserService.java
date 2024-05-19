@@ -1,11 +1,14 @@
 package comatching.comatcing.user;
 
-import java.util.UUID;
-
 import org.springframework.stereotype.Service;
 
 import comatching.comatcing.process_ai.CSVHandler;
+import comatching.comatcing.security.SecurityUtil;
+import comatching.comatcing.security.jwt.JWTUtil;
+import comatching.comatcing.user.dto.DuplicationCheckRes;
+import comatching.comatcing.user.dto.MainResponse;
 import comatching.comatcing.user.dto.RegisterDetailReq;
+import comatching.comatcing.user.dto.RegisterDetailRes;
 import comatching.comatcing.user.entity.UserAiFeature;
 import comatching.comatcing.user.entity.UserInfo;
 import comatching.comatcing.user.repository.UserAiFeatureRepository;
@@ -19,24 +22,62 @@ public class UserService {
 	UserInfoRepository userInfoRepository;
 	UserAiFeatureRepository userAiFeatureRepository;
 	CSVHandler csvHandler;
+	JWTUtil jwtUtil;
 
 	public UserService(UserInfoRepository userInfoRepository, CSVHandler csvHandler,
-		UserAiFeatureRepository userAiFeatureRepository
+		UserAiFeatureRepository userAiFeatureRepository,
+		JWTUtil jwtUtil
 	) {
 		this.userInfoRepository = userInfoRepository;
 		this.userAiFeatureRepository = userAiFeatureRepository;
 		this.csvHandler = csvHandler;
+		this.jwtUtil = jwtUtil;
 	}
 
 	public Response registerUserDetail(RegisterDetailReq req) {
-		String temp_name = saveUserDetail(req);
-		csvHandler.addUser(userInfoRepository.findByUsername(temp_name));
-		return Response.ok();
+		String username = SecurityUtil.getContextUserInfo().getUsername();
+		saveUserDetail(req);
+		csvHandler.addUser(userInfoRepository.findByUsername(username));
+		RegisterDetailRes res = new RegisterDetailRes(
+			jwtUtil.createJwt(
+				SecurityUtil.getContextUserInfo().getUsername(),
+				"ROLE_USER",
+				21600000L
+			));
+		return Response.ok(res);
 	}
 
-	//todo:username 임시 설정함 변경해야됨 나중에
+	public Response<DuplicationCheckRes> duplicationCheck(String contactId, String contactType) {
+		contactId = contactType.equals("instagram") ? "@" + contactId : contactId;
+		Boolean isDuplication = userInfoRepository.existsByContactId(contactId);
+		System.out.println("[UserService] - duplicationCheck.isDuplicated=" + isDuplication);
+		DuplicationCheckRes res = new DuplicationCheckRes(isDuplication);
+		return Response.ok(res);
+	}
+
+	public Response<MainResponse> getMainInfo() {
+		String username = SecurityUtil.getContextUserInfo().getUsername();
+		UserInfo userInfo = userInfoRepository.findByUsername(username);
+		Long participation = userInfoRepository.count();
+
+		return Response.ok(MainResponse.builder()
+			.major(userInfo.getUserAiFeature().getMajor())
+			.contactId(userInfo.getContactId())
+			.mbti(userInfo.getUserAiFeature().getMbti())
+			.hobbyList(userInfo.getUserAiFeature().getHobby())
+			.contactFrequency(userInfo.getUserAiFeature().getContactFrequency().getValue())
+			.song(userInfo.getSong())
+			.participation(participation)
+			.leftPoint(userInfo.getPoint())
+			.pickMe(userInfo.getPickMe())
+			.age(userInfo.getUserAiFeature().getAge())
+			.comment(userInfo.getComment())
+			.build());
+	}
+
 	@Transactional
-	public String saveUserDetail(RegisterDetailReq req) {
+	public void saveUserDetail(RegisterDetailReq req) {
+		UserInfo userInfo = userInfoRepository.findByUsername(SecurityUtil.getContextUserInfo().getUsername());
 		UserAiFeature userAiFeature = UserAiFeature.builder()
 			.major(req.getMajor())
 			.gender(req.getGender())
@@ -44,19 +85,17 @@ public class UserService {
 			.mbti(req.getMbti())
 			.hobby(req.getHobby())
 			.contactFrequency(req.getContactFrequency())
-			//.userInfo(userInfo)
-			.build();
-		String temp_name = UUID.randomUUID().toString();
-
-		UserInfo userInfo = UserInfo.builder()
-			.contactId(req.getContactId())
-			.song(req.getSong())
-			.comment(req.getComment())
-			.userAiFeature(userAiFeature)
-			.username(temp_name)
 			.build();
 
+		userInfo.updateSocialToUser(
+			req.getContactId(),
+			req.getSong(),
+			req.getComment(),
+			userAiFeature,
+			"ROLE_USER",
+			0,
+			1
+		);
 		userInfoRepository.save(userInfo);
-		return temp_name;
 	}
 }

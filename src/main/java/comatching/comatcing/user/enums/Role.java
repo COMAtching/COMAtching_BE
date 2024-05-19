@@ -1,7 +1,16 @@
 package comatching.comatcing.user.enums;
 
+import lombok.Getter;
+
+@Getter
 public enum Role {
-	SOCIAL,
-	USER,
-	OPERATOR
+	SOCIAL("ROLE_SOCIAL"),
+	USER("ROLE_USER"),
+	ADMIN("ROLE_ADMIN");
+
+	private final String roleName;
+
+	Role(String role) {
+		this.roleName = role;
+	}
 }

@@ -10,18 +10,21 @@ public class HobbyListConverter implements AttributeConverter<List<Hobby>, Strin
 
 	@Override
 	public String convertToDatabaseColumn(List<Hobby> attribute) {
-		String result = "";
+		StringBuilder result = new StringBuilder();
 		for (Hobby hobby : attribute) {
-			result.concat(hobby.toString() + ",");
+			System.out.println("[hobbyListConverter] - add >> " + hobby.getValue());
+			result.append(hobby.getValue().toString() + ",");
 		}
-		return result;
+
+		System.out.println("[hobbyListConverter] - result= " + result);
+		return result.toString();
 	}
 
 	@Override
 	public List<Hobby> convertToEntityAttribute(String dbData) {
 		List<Hobby> result = new ArrayList<>();
 		for (String hobby : dbData.split(",")) {
-			if (hobby != "") {
+			if (!hobby.equals("")) {
 				result.add(Hobby.valueOf(hobby));
 			}
 		}

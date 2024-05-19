@@ -1,11 +1,15 @@
 package comatching.comatcing.user;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import comatching.comatcing.user.dto.DuplicationCheckRes;
+import comatching.comatcing.user.dto.MainResponse;
 import comatching.comatcing.user.dto.RegisterDetailReq;
 import comatching.comatcing.util.Response;
 
@@ -27,4 +31,13 @@ public class UserRegisterController {
 		return res;
 	}
 
+	@GetMapping("/contact/duplication")
+	public Response<DuplicationCheckRes> duplicationCheck(@RequestParam String contactId, String contactType) {
+		return userService.duplicationCheck(contactId, contactType);
+	}
+
+	@GetMapping("/user/main")
+	public Response<MainResponse> getMainInfo() {
+		return userService.getMainInfo();
+	}
 }

@@ -5,10 +5,12 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import com.opencsv.CSVReader;
-import com.opencsv.CSVWriter;
+import com.opencsv.CSVWriterBuilder;
+import com.opencsv.ICSVWriter;
 import com.opencsv.exceptions.CsvException;
 
 import comatching.comatcing.comatching.dto.MatchReq;
@@ -20,11 +22,14 @@ import comatching.comatcing.user.enums.Hobby;
 @Component
 public class CSVHandler {
 
-	public final String path = "C:\\Users\\smdmi\\Desktop\\comatching.csv";
+	@Value("${spring.file.path}")
+	private String path;
 
 	public void addUser(UserInfo userInfo) {
 		try {
-			CSVWriter csvWriter = new CSVWriter(new FileWriter(path, true));
+			ICSVWriter csvWriter = new CSVWriterBuilder(new FileWriter(path, true))
+				.withQuoteChar(ICSVWriter.NO_QUOTE_CHARACTER)
+				.build();
 			String[] newData = userAiFeatureToStringArray(userInfo);
 			csvWriter.writeNext(newData);
 			csvWriter.close();
@@ -48,7 +53,9 @@ public class CSVHandler {
 				}
 			}
 
-			CSVWriter csvWriter = new CSVWriter(new FileWriter(path));
+			ICSVWriter csvWriter = new CSVWriterBuilder(new FileWriter(path, true))
+				.withQuoteChar(ICSVWriter.NO_QUOTE_CHARACTER)
+				.build();
 			csvWriter.writeAll(csvData);
 			csvWriter.close();
 		} catch (IOException e) {
@@ -72,7 +79,9 @@ public class CSVHandler {
 				}
 			}
 
-			CSVWriter csvWriter = new CSVWriter(new FileWriter(path));
+			ICSVWriter csvWriter = new CSVWriterBuilder(new FileWriter(path, true))
+				.withQuoteChar(ICSVWriter.NO_QUOTE_CHARACTER)
+				.build();
 			csvWriter.writeAll(csvData);
 			csvWriter.close();
 		} catch (IOException e) {

@@ -8,6 +8,7 @@ import comatching.comatcing.comatching.dto.MatchReq;
 import comatching.comatcing.comatching.dto.MatchRes;
 import comatching.comatcing.comatching.dto.ValidUserMatchCodeRes;
 import comatching.comatcing.process_ai.CSVHandler;
+import comatching.comatcing.security.SecurityUtil;
 import comatching.comatcing.util.Response;
 
 @Service
@@ -29,6 +30,7 @@ public class ComatchingService {
 
 	public Response<GetMatchCodeRes> getMatchCode() {
 		//todo: context 홀더에서 유저 아이디 가져오기
+		SecurityUtil.getContextUserInfo();
 		GetMatchCodeRes res = new GetMatchCodeRes(comatchingRequestHandler.generateMatchCode(1L));
 		return Response.ok(res);
 	}
@@ -45,5 +47,4 @@ public class ComatchingService {
 		comatchingRequestHandler.updateReqRegisterTime(req.getMatchCode());
 		return Response.ok(res);
 	}
-
 }

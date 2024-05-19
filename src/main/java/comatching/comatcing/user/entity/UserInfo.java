@@ -1,12 +1,9 @@
 package comatching.comatcing.user.entity;
 
-import comatching.comatcing.user.enums.Role;
 import comatching.comatcing.util.BaseEntity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -46,12 +43,11 @@ public class UserInfo extends BaseEntity {
 
 	private String contactId;
 
-	@Enumerated(EnumType.STRING)
-	private Role role;
+	private String email;
+
+	private String role;
 
 	private Integer pickMe;
-
-	private Integer pickMatch;
 
 	private String song;
 
@@ -61,19 +57,19 @@ public class UserInfo extends BaseEntity {
 
 	@Builder
 	public UserInfo(UserAiFeature userAiFeature, String accessToken, String password,
-		String contactId, Role role, Integer pickMe, Integer pickMatch, String song, String comment, Integer point,
-		String username) {
+		String contactId, String role, Integer pickMe, Integer pickMatch, String song, String comment, Integer point,
+		String username, String email) {
 		this.userAiFeature = userAiFeature;
 		this.accessToken = accessToken;
 		this.password = password;
 		this.contactId = contactId;
 		this.role = role;
 		this.pickMe = pickMe;
-		this.pickMatch = pickMatch;
 		this.song = song;
 		this.comment = comment;
 		this.point = point;
 		this.username = username;
+		this.email = email;
 	}
 
 	public void updatePointPickMe(Integer point, Integer pickMe) {
@@ -81,4 +77,18 @@ public class UserInfo extends BaseEntity {
 		this.pickMe = pickMe;
 	}
 
+	public void updateUsername(String username) {
+		this.username = username;
+	}
+
+	public void updateSocialToUser(String contactId, String song, String comment, UserAiFeature userAiFeature,
+		String role, Integer point, Integer pickMe) {
+		this.contactId = contactId;
+		this.song = song;
+		this.comment = comment;
+		this.userAiFeature = userAiFeature;
+		this.role = role;
+		this.point = point;
+		this.pickMe = pickMe;
+	}
 }

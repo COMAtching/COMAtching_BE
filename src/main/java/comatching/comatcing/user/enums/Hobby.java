@@ -14,14 +14,14 @@ public enum Hobby {
 	요리(3, "요리"),
 	맛집탐방(4, "맛집탐방"),
 	예술관람(5, "예술관람"),
-	노래감상(6, "노래감상"),
+	음악감상(6, "음악감상"),
 	악기(7, "악기"),
 	사진(8, "사진"),
 	테크(9, "테크"),
 	창작(10, "창작"),
 	야외활동(11, "야외활동"),
 	여행(12, "여행"),
-	미디어시청(13, "미디어시청"),
+	ott시청(13, "ott시청"),
 	게임(14, "게임"),
 	독서(15, "독서");
 
@@ -39,10 +39,11 @@ public enum Hobby {
 			return result.toString();
 		}
 		for (Hobby hobby : hobbies) {
-			result.append(hobby.getVector()).append(",");
+			result.append(hobby.getVector().toString()).append("_");
 		}
+		System.out.println("[Hobby] - toCscValue().result =" + result);
 
-		return result.substring(0, result.length() - 1);
+		return result.toString();
 	}
 
 	@JsonCreator
