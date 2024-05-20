@@ -92,14 +92,15 @@ public class SecurityConfig {
 		//경로별 인가 작업
 		http
 			.authorizeHttpRequests((auth) -> auth
-				.requestMatchers("/participation/*").permitAll()
-				.anyRequest().authenticated());
+				.requestMatchers("/participation/count").permitAll()
+				.requestMatchers("/account/register-detail", "/account/contact/duplication").hasRole("SOCIAL")
+				.requestMatchers("/admin/*").hasRole("ADMIN")
+				.anyRequest().hasRole("USER"));
 
 		//세션 설정 : STATELESS
 		http
 			.sessionManagement((session) -> session
 				.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-
 		return http.build();
 	}
 }
