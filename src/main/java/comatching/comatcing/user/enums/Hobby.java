@@ -23,7 +23,8 @@ public enum Hobby {
 	여행(12, "여행"),
 	ott시청(13, "ott시청"),
 	게임(14, "게임"),
-	독서(15, "독서");
+	독서(15, "독서"),
+	NONE(-1, "NONE");
 
 	private final Integer vector;
 	private final String value;
@@ -35,12 +36,14 @@ public enum Hobby {
 
 	public static String toCsvValue(List<Hobby> hobbies) {
 		StringBuilder result = new StringBuilder();
-		if (hobbies == null) {
-			return result.toString();
+		if (hobbies == null || hobbies.get(0).equals(Hobby.NONE)) {
+			return "";
+		} else {
+			for (Hobby hobby : hobbies) {
+				result.append(hobby.getVector().toString()).append("_");
+			}
 		}
-		for (Hobby hobby : hobbies) {
-			result.append(hobby.getVector().toString()).append("_");
-		}
+
 		System.out.println("[Hobby] - toCscValue().result =" + result);
 
 		return result.toString();

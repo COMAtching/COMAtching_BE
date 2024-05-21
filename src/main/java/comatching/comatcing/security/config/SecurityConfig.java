@@ -94,7 +94,7 @@ public class SecurityConfig {
 			.authorizeHttpRequests((auth) -> auth
 				.requestMatchers("/participation/count").permitAll()
 				.requestMatchers("/account/register-detail", "/account/contact/duplication").hasRole("SOCIAL")
-				.requestMatchers("/admin/*").hasRole("ADMIN")
+				//.requestMatchers("/admin/*").hasRole("ADMIN")
 				.anyRequest().hasRole("USER"));
 
 		//세션 설정 : STATELESS

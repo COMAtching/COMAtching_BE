@@ -1,4 +1,4 @@
-package comatching.comatcing.user;
+package comatching.comatcing.user.service;
 
 import org.springframework.stereotype.Service;
 

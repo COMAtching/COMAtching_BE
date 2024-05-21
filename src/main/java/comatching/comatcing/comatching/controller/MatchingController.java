@@ -5,10 +5,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import comatching.comatcing.comatching.dto.GetMatchCodeRes;
-import comatching.comatcing.comatching.dto.MatchCodeAdminReq;
 import comatching.comatcing.comatching.dto.MatchReq;
 import comatching.comatcing.comatching.dto.MatchRes;
 import comatching.comatcing.comatching.dto.ValidUserMatchCodeRes;
@@ -32,12 +32,12 @@ public class MatchingController {
 		return comatchingService.getMatchCode();
 	}
 
-	@PostMapping("/code-req/admin")
-	public Response<ValidUserMatchCodeRes> validUserMatchCode(@RequestBody MatchCodeAdminReq req) {
-		return comatchingService.validUserMatchCode(req);
+	@GetMapping("/code-req/admin")
+	public Response<ValidUserMatchCodeRes> validUserMatchCode(@RequestParam String code) {
+		return comatchingService.validUserMatchCode(code);
 	}
 
-	@GetMapping("/match")
+	@PostMapping("/match")
 	public Response<MatchRes> requestMatch(@RequestBody MatchReq req) {
 		return comatchingService.requestMatch(req);
 	}

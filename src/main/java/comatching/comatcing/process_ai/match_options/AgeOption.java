@@ -6,7 +6,8 @@ import lombok.Getter;
 public enum AgeOption {
 	YOUNGER(0),
 	EQUAL(1),
-	OLDER(2);
+	OLDER(2),
+	NONE(-1);
 
 	private final Integer vector;
 
@@ -15,7 +16,7 @@ public enum AgeOption {
 	}
 
 	public static String toCsvValue(AgeOption option) {
-		if (option == null)
+		if (option == null || option.equals(AgeOption.NONE))
 			return "";
 		else
 			return option.getVector().toString();

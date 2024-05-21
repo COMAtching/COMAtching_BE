@@ -1,4 +1,4 @@
-package comatching.comatcing.user;
+package comatching.comatcing.user.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import comatching.comatcing.user.dto.ParticipationRes;
 import comatching.comatcing.user.repository.UserInfoRepository;
+import comatching.comatcing.user.service.UserService;
 
 @Controller
 public class UserController {

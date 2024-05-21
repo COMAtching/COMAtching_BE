@@ -6,7 +6,8 @@ import lombok.Getter;
 public enum ContactFrequencyOption {
 	FREQUENT(2),
 	NORMAL(1),
-	NOT_FREQUENT(0);
+	NOT_FREQUENT(0),
+	NONE(-1);
 
 	private final Integer vector;
 
@@ -15,7 +16,7 @@ public enum ContactFrequencyOption {
 	}
 
 	public static String toCsvValue(ContactFrequencyOption option) {
-		if (option == null)
+		if (option == null || option.equals(ContactFrequencyOption.NONE))
 			return "";
 		else
 			return option.getVector().toString();

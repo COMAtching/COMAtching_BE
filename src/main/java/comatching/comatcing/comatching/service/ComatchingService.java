@@ -3,7 +3,6 @@ package comatching.comatcing.comatching.service;
 import org.springframework.stereotype.Service;
 
 import comatching.comatcing.comatching.dto.GetMatchCodeRes;
-import comatching.comatcing.comatching.dto.MatchCodeAdminReq;
 import comatching.comatcing.comatching.dto.MatchReq;
 import comatching.comatcing.comatching.dto.MatchRes;
 import comatching.comatcing.comatching.dto.ValidUserMatchCodeRes;
@@ -30,21 +29,23 @@ public class ComatchingService {
 
 	public Response<GetMatchCodeRes> getMatchCode() {
 		//todo: context 홀더에서 유저 아이디 가져오기
-		SecurityUtil.getContextUserInfo();
-		GetMatchCodeRes res = new GetMatchCodeRes(comatchingRequestHandler.generateMatchCode(1L));
+		String username = SecurityUtil.getContextUserInfo().getUsername();
+		GetMatchCodeRes res = new GetMatchCodeRes(comatchingRequestHandler.generateMatchCode(username));
 		return Response.ok(res);
 	}
 
-	public Response<ValidUserMatchCodeRes> validUserMatchCode(MatchCodeAdminReq req) {
-		comatchingRequestHandler.checkMatchCode(req);
-		ValidUserMatchCodeRes res = new ValidUserMatchCodeRes(comatchingMemberService.getUserPoint());
+	public Response<ValidUserMatchCodeRes> validUserMatchCode(String code) {
+		String username = comatchingRequestHandler.checkMatchCode(code);
+		ValidUserMatchCodeRes res = new ValidUserMatchCodeRes(comatchingMemberService.getUserPoint(username));
 		return Response.ok(res);
 	}
 
 	public Response<MatchRes> requestMatch(MatchReq req) {
-		MatchRes res = comatchingAiConnectService.requestMatch(req);
-		comatchingMemberService.requestMatch(req, res);
-		comatchingRequestHandler.updateReqRegisterTime(req.getMatchCode());
+		String pickerUsername = comatchingRequestHandler.getUsernameForMatch(req.getMatchCode());
+		csvHandler.match(req, pickerUsername);  //csv에 match유저 추가
+		MatchRes res = comatchingAiConnectService.requestMatch(); //AI한테 결과 받아오기
+		comatchingMemberService.requestMatch(req, res, pickerUsername);  //포인트 차감
+		comatchingRequestHandler.updateReqRegisterTime(req.getMatchCode());  //
 		return Response.ok(res);
 	}
 }

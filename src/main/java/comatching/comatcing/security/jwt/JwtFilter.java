@@ -55,7 +55,7 @@ public class JwtFilter extends OncePerRequestFilter {
 			//filterChain.doFilter(request, response);
 		}
 
-		System.out.println("[filterchain] - 널검증 만료검증 사이");
+		//System.out.println("[filterchain] - 널검증 만료검증 사이");
 
 		//토큰
 		String token = authorization;
@@ -66,13 +66,13 @@ public class JwtFilter extends OncePerRequestFilter {
 			//filterChain.doFilter(request, response);
 			//조건이 해당되면 메소드 종료 (필수)
 		}
-		System.out.println("[filterchain] - 만료후");
+		//System.out.println("[filterchain] - 만료후");
 
 		//토큰에서 username과 role 획득
 		String username = jwtUtil.getUsername(token);
 		String role = jwtUtil.getRole(token);
 
-		System.out.println("[filterchain] - 유저이름 역할");
+		//System.out.println("[filterchain] - 유저이름 역할");
 
 		//userDTO를 생성하여 값 set
 		UserDto userDTO = new UserDto();

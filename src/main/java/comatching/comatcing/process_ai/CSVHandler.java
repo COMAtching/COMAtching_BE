@@ -38,7 +38,7 @@ public class CSVHandler {
 		}
 	}
 
-	public void match(MatchReq matchReq, String username) {
+	public void match(MatchReq matchReq, String pickerUsername) {
 
 		try {
 			CSVReader csvReader = new CSVReader(new FileReader(path));
@@ -47,13 +47,13 @@ public class CSVHandler {
 
 			for (int i = 0; i < csvData.size(); i++) {
 				String[] row = csvData.get(i);
-				if (row[0].equals(username)) {
+				if (row[0].equals(pickerUsername)) {
 					csvData.set(i, setMatchOption(row, matchReq));
 					break;
 				}
 			}
 
-			ICSVWriter csvWriter = new CSVWriterBuilder(new FileWriter(path, true))
+			ICSVWriter csvWriter = new CSVWriterBuilder(new FileWriter(path))
 				.withQuoteChar(ICSVWriter.NO_QUOTE_CHARACTER)
 				.build();
 			csvWriter.writeAll(csvData);
@@ -65,7 +65,37 @@ public class CSVHandler {
 		}
 	}
 
-	public void deleteUser(String username) throws IOException, CsvException {
+	public void updatePickMeCount(String username) {
+		try {
+			CSVReader csvReader = new CSVReader(new FileReader(path));
+			List<String[]> csvData = csvReader.readAll();
+			csvReader.close();
+
+			for (int i = 0; i < csvData.size(); i++) {
+				String[] row = csvData.get(i);
+				if (row[0].equals(username)) {
+
+					System.out.println("[CSVHandler] - row[13] = " + row[13]);
+					Integer count = Integer.parseInt(row[13]);
+					//count -= 1;
+					row[13] = count.toString();
+					csvData.set(i, row);
+					break;
+				}
+			}
+
+			ICSVWriter csvWriter = new CSVWriterBuilder(new FileWriter(path))
+				.withQuoteChar(ICSVWriter.NO_QUOTE_CHARACTER)
+				.build();
+			csvWriter.writeAll(csvData);
+			csvWriter.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (CsvException e) {
+			e.printStackTrace();
+		}
+	}
+	/*public void deleteUser(String username) throws IOException, CsvException {
 		try {
 			CSVReader csvReader = new CSVReader(new FileReader(path));
 			List<String[]> csvData = csvReader.readAll();
@@ -89,7 +119,7 @@ public class CSVHandler {
 		} catch (CsvException e) {
 			e.printStackTrace();
 		}
-	}
+	}*/
 
 	private String[] userAiFeatureToStringArray(UserInfo userInfo) {
 
@@ -100,18 +130,19 @@ public class CSVHandler {
 			userInfo.getUserAiFeature().getMbti(),
 			userInfo.getUserAiFeature().getMajor().getVector().toString(),
 			Hobby.toCsvValue(userInfo.getUserAiFeature().getHobby()),
-			userInfo.getUserAiFeature().getContactFrequency().getVector().toString()
+			userInfo.getUserAiFeature().getContactFrequency().getVector().toString(),
+			"", "", "", "", "", "",
+			"1"
 		};
-
 		return result;
 	}
 
 	private String[] setMatchOption(String[] row, MatchReq req) {
-		row[7] = req.getMbtiOption();
-		row[8] = Hobby.toCsvValue(req.getHobby());
-		row[9] = AgeOption.toCsvValue(req.getAgeOption());
-		row[10] = ContactFrequencyOption.toCsvValue(req.getContactFrequencyOption());
-		row[11] = req.getMajorOptionCheck() ? "1" : "0";
+		row[7] = AgeOption.toCsvValue(req.getAgeOption());
+		row[8] = req.getMbtiOption();
+		row[9] = req.getNoSameMajorOption() ? "1" : "0";
+		row[10] = Hobby.toCsvValue(req.getHobbyOption());
+		row[11] = ContactFrequencyOption.toCsvValue(req.getContactFrequencyOption());
 		row[12] = "1";
 		return row;
 	}

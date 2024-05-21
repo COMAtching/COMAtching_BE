@@ -17,9 +17,9 @@ import lombok.Getter;
 public class MatchReq {
 	private String mbtiOption;
 	private ContactFrequencyOption contactFrequencyOption;
-	private List<Hobby> hobby;
+	private List<Hobby> hobbyOption;
 	private AgeOption ageOption;
 	private String matchCode;
 	private Integer aiOptionCount;
-	private Boolean majorOptionCheck;
+	private Boolean noSameMajorOption;
 }

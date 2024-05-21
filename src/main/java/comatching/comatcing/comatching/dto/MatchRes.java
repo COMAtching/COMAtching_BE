@@ -25,9 +25,10 @@ public class MatchRes {
 	private Integer age;
 	private Gender gender;
 	private Major major;
-	private String username;
+	private Integer currentPoint;
+	private String enemyUsername;
 
-	public static MatchRes fromEntity(UserInfo userInfo) {
+	public static MatchRes fromEnemyEntity(UserInfo userInfo) {
 
 		return MatchRes.builder()
 			.song(userInfo.getSong())
@@ -37,7 +38,8 @@ public class MatchRes {
 			.hobby(userInfo.getUserAiFeature().getHobby())
 			.age(userInfo.getUserAiFeature().getAge())
 			.major(userInfo.getUserAiFeature().getMajor())
+			.enemyUsername(userInfo.getUsername())
+			.gender(userInfo.getUserAiFeature().getGender())
 			.build();
 	}
-
 }

@@ -9,7 +9,7 @@ import lombok.Data;
 @Builder
 @Data
 public class RequestMapDto {
-	Long userId;
+	String username;
 	LocalDateTime registerTime;
 	ReqState reqState;
 }

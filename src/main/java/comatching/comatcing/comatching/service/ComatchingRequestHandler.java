@@ -9,7 +9,6 @@ import java.util.UUID;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import comatching.comatcing.comatching.dto.MatchCodeAdminReq;
 import comatching.comatcing.comatching.dto.RequestMapDto;
 import comatching.comatcing.comatching.enums.ReqState;
 import comatching.comatcing.util.ResponseCode;
@@ -19,10 +18,10 @@ import comatching.comatcing.util.exception.BusinessException;
 public class ComatchingRequestHandler {
 	private HashMap<String, RequestMapDto> reqMap = new HashMap<String, RequestMapDto>();
 
-	public String generateMatchCode(Long userId) {
+	public String generateMatchCode(String username) {
 		String newCode = UUID.randomUUID().toString().replace("-", "");
 		RequestMapDto requestMapDto = RequestMapDto.builder()
-			.userId(userId)
+			.username(username)
 			.registerTime(LocalDateTime.now())
 			.reqState(ReqState.REQ)
 			.build();
@@ -31,7 +30,7 @@ public class ComatchingRequestHandler {
 
 		while (iterator.hasNext()) {
 			Map.Entry<String, RequestMapDto> entry = iterator.next();
-			if (entry.getValue().getUserId().equals(userId)) {
+			if (entry.getValue().getUsername().equals(username)) {
 				iterator.remove(); // 현재 요소를 안전하게 제거
 			}
 		}
@@ -40,13 +39,13 @@ public class ComatchingRequestHandler {
 		return newCode;
 	}
 
-	public Long checkMatchCode(MatchCodeAdminReq req) {
+	public String checkMatchCode(String code) {
 
-		if (reqMap.containsKey(req.getMatchCode())) {
-			RequestMapDto dto = reqMap.get(req.getMatchCode());
+		if (reqMap.containsKey(code)) {
+			RequestMapDto dto = reqMap.get(code);
 			dto.setReqState(ReqState.VALID);
 			printMap();
-			return dto.getUserId();
+			return dto.getUsername();
 		} else {
 			throw new BusinessException(ResponseCode.MATCH_CODE_NOT_FOUND);
 		}
@@ -58,6 +57,15 @@ public class ComatchingRequestHandler {
 			printMap();
 		} else {
 			System.out.println("[Match] - 결과 응답후 날짜 업데이트 안됨!");
+		}
+	}
+
+	public String getUsernameForMatch(String matchCode) {
+		RequestMapDto dto = reqMap.get(matchCode);
+		if (dto.getReqState().equals(ReqState.VALID)) {
+			return dto.getUsername();
+		} else {
+			throw new BusinessException(ResponseCode.MATCH_NOT_ALLOW);
 		}
 	}
 
@@ -75,9 +83,10 @@ public class ComatchingRequestHandler {
 		int i = 0;
 		System.out.println("====== request handle ======");
 		for (Map.Entry<String, RequestMapDto> entry : reqMap.entrySet()) {
-			System.out.println("[" + i + "] " + entry.getKey() + entry.getValue().getUserId() + ": " + entry.getValue()
-				.getReqState()
-				.toString());
+			System.out.println(
+				"[" + i + "] " + entry.getKey() + entry.getValue().getUsername() + ": " + entry.getValue()
+					.getReqState()
+					.toString());
 		}
 	}
 }
