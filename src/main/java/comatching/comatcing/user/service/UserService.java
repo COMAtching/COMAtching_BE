@@ -2,6 +2,7 @@ package comatching.comatcing.user.service;
 
 import org.springframework.stereotype.Service;
 
+import comatching.comatcing.admin.service.ChargeRequestHandler;
 import comatching.comatcing.process_ai.CSVHandler;
 import comatching.comatcing.security.SecurityUtil;
 import comatching.comatcing.security.jwt.JWTUtil;
@@ -23,15 +24,17 @@ public class UserService {
 	UserAiFeatureRepository userAiFeatureRepository;
 	CSVHandler csvHandler;
 	JWTUtil jwtUtil;
+	ChargeRequestHandler chargeRequestHandler;
 
 	public UserService(UserInfoRepository userInfoRepository, CSVHandler csvHandler,
 		UserAiFeatureRepository userAiFeatureRepository,
-		JWTUtil jwtUtil
+		JWTUtil jwtUtil, ChargeRequestHandler chargeRequestHandler
 	) {
 		this.userInfoRepository = userInfoRepository;
 		this.userAiFeatureRepository = userAiFeatureRepository;
 		this.csvHandler = csvHandler;
 		this.jwtUtil = jwtUtil;
+		this.chargeRequestHandler = chargeRequestHandler;
 	}
 
 	public Response registerUserDetail(RegisterDetailReq req) {
@@ -73,6 +76,13 @@ public class UserService {
 			.age(userInfo.getUserAiFeature().getAge())
 			.comment(userInfo.getComment())
 			.build());
+	}
+
+	public Response addChargeRequest() {
+		String username = SecurityUtil.getContextUserInfo().getUsername();
+		String contactId = userInfoRepository.findByUsername(username).getContactId();
+		chargeRequestHandler.addRequest(contactId);
+		return Response.ok();
 	}
 
 	@Transactional

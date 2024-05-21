@@ -1,13 +1,19 @@
 package comatching.comatcing.user.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import comatching.comatcing.point.entity.PointHistory;
 import comatching.comatcing.util.BaseEntity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
@@ -35,11 +41,10 @@ public class UserInfo extends BaseEntity {
 	@JoinColumn(name = "user_ai_feature_id")
 	private UserAiFeature userAiFeature;
 
+	@OneToMany(mappedBy = "userInfo", fetch = FetchType.LAZY)
+	private List<PointHistory> pointHistoryList = new ArrayList<PointHistory>();
+
 	private String username;
-
-	private String accessToken;
-
-	private String password;
 
 	private String contactId;
 
@@ -56,12 +61,10 @@ public class UserInfo extends BaseEntity {
 	private String comment;
 
 	@Builder
-	public UserInfo(UserAiFeature userAiFeature, String accessToken, String password,
-		String contactId, String role, Integer pickMe, Integer pickMatch, String song, String comment, Integer point,
+	public UserInfo(UserAiFeature userAiFeature, String contactId, String role, Integer pickMe, String song,
+		String comment, Integer point,
 		String username, String email) {
 		this.userAiFeature = userAiFeature;
-		this.accessToken = accessToken;
-		this.password = password;
 		this.contactId = contactId;
 		this.role = role;
 		this.pickMe = pickMe;
@@ -72,9 +75,12 @@ public class UserInfo extends BaseEntity {
 		this.email = email;
 	}
 
-	public void updatePointPickMe(Integer point, Integer pickMe) {
-		this.point = point;
+	public void updatePickMe(Integer pickMe) {
 		this.pickMe = pickMe;
+	}
+
+	public void updatePoint(Integer point) {
+		this.point = point;
 	}
 
 	public void updateUsername(String username) {

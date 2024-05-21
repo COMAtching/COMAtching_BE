@@ -17,7 +17,13 @@ public enum ResponseCode {
 
 	//Security
 	TOKEN_EXPIRED(400, "SEC-001", HttpStatus.BAD_REQUEST, "token is expired or not available"),
-	TOKEN_NOT_AVAILABLE(400, "SEC-002", HttpStatus.BAD_REQUEST, "token is not available ");
+	TOKEN_NOT_AVAILABLE(400, "SEC-002", HttpStatus.BAD_REQUEST, "token is not available "),
+
+	//CHARGE
+	CHARGE_ALREADY_REQUESTED(400, "CHR-001", HttpStatus.BAD_REQUEST, "이미 요청된 충전입니다."),
+	CHARGE_REQUEST_IS_NOT_EXIST(400, "CHR-002", HttpStatus.BAD_REQUEST, "충전 요청이 존재하지 않습니다,"),
+	CHARGE_REQUEST_IS_EMPTY(400, "CHR-003", HttpStatus.BAD_REQUEST, "충전 요청이 비어있습니다."),
+	POINT_NOT_CORRECT(400, "CHR-004", HttpStatus.BAD_REQUEST, "DB와 포인트가 맞지 않습니다");
 
 	private final Integer status;
 	private final String code;

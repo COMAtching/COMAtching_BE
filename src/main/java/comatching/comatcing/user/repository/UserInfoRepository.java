@@ -9,4 +9,6 @@ public interface UserInfoRepository extends JpaRepository<UserInfo, Long> {
 	UserInfo findByUsername(@Param("username") String username);
 
 	Boolean existsByContactId(@Param("contactId") String contactId);
+
+	UserInfo findByContactId(@Param("contactId") String contactId);
 }
