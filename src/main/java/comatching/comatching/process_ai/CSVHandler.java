@@ -16,14 +16,14 @@ import com.opencsv.CSVWriterBuilder;
 import com.opencsv.ICSVWriter;
 import com.opencsv.exceptions.CsvException;
 
+import comatching.comatching.comatching.dto.MatchReq;
 import comatching.comatching.comatching.entity.ComatchHistory;
+import comatching.comatching.comatching.repository.ComatchHistoryRepository;
+import comatching.comatching.process_ai.match_options.AgeOption;
 import comatching.comatching.process_ai.match_options.ContactFrequencyOption;
 import comatching.comatching.user.entity.UserInfo;
 import comatching.comatching.user.enums.Hobby;
 import comatching.comatching.user.repository.UserInfoRepository;
-import comatching.comatching.comatching.dto.MatchReq;
-import comatching.comatching.comatching.repository.ComatchHistoryRepository;
-import comatching.comatching.process_ai.match_options.AgeOption;
 
 @Component
 public class CSVHandler {
@@ -57,11 +57,6 @@ public class CSVHandler {
 	public void match(MatchReq matchReq, String pickerUsername) {
 
 		try {
-			System.out.println("[csvMatch mbti] - " + matchReq.getMbtiOption());
-			System.out.println("[csvMatch hobby] - " + matchReq.getHobbyOption().toArray());
-			System.out.println("[csvMatch ageOption] - " + matchReq.getAgeOption());
-			System.out.println("[csvMatch contactFrequnecy] - " + matchReq.getContactFrequencyOption());
-
 			CSVReader csvReader = new CSVReader(new FileReader(path));
 			List<String[]> csvData = csvReader.readAll();
 			csvReader.close();
@@ -71,11 +66,9 @@ public class CSVHandler {
 				if (row[0].equals(pickerUsername)) {
 					String[] s = setMatchOption(row, matchReq);
 					System.out.println(setMatchOption(row, matchReq));
-					for(int j = 0; j<s.length;j++){
+					for (int j = 0; j < s.length; j++) {
 						System.out.println(s[j].toString());
 					}
-
-					System.out.println("[csvMatch matcherId] - " + i);
 					csvData.set(i, setMatchOption(row, matchReq));
 					break;
 				}
@@ -101,8 +94,6 @@ public class CSVHandler {
 			for (int i = 0; i < csvData.size(); i++) {
 				String[] row = csvData.get(i);
 				if (row[0].equals(username)) {
-
-					System.out.println("[CSVHandler] - row[13] = " + row[13]);
 					Integer count = Integer.parseInt(row[13]);
 					if (count < 0) {
 						count = 0;
