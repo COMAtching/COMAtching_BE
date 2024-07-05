@@ -27,18 +27,33 @@ public class ComatchingService {
 		this.csvHandler = csvHandler;
 	}
 
+	/**
+	 * QR에 쓰일 코드 handler를 통한 등록 및 발급
+	 * @return 매칭 요청 코드 반환
+	 */
 	public Response<GetMatchCodeRes> getMatchCode() {
 		String username = SecurityUtil.getContextUserInfo().getUsername();
 		GetMatchCodeRes res = new GetMatchCodeRes(comatchingRequestHandler.generateMatchCode(username));
 		return Response.ok(res);
 	}
 
+	/**
+	 * 사용자 요청 코드 검증
+	 * @param code : 사용자 요청 코드
+	 * @return 코드 검증 성공시, 사용자 잔여 포인트 반환
+	 */
 	public Response<ValidUserMatchCodeRes> validUserMatchCode(String code) {
 		String username = comatchingRequestHandler.checkMatchCode(code);
 		ValidUserMatchCodeRes res = new ValidUserMatchCodeRes(comatchingMemberService.getUserPoint(username));
 		return Response.ok(res);
 	}
 
+	/**
+	 * 매칭 처리
+	 * 매치
+	 * @param req : 매칭을 위한 상대방 피처
+	 * @return : 결과창에서 쓰일 매칭 상대에 대한 피처 정보
+	 */
 	public Response<MatchRes> requestMatch(MatchReq req) {
 		String pickerUsername = comatchingRequestHandler.getUsernameForMatch(req.getMatchCode());
 		csvHandler.match(req, pickerUsername);

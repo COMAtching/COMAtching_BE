@@ -32,6 +32,10 @@ public class HistoryService {
 		this.userInfoRepository = userInfoRepository;
 	}
 
+	/**
+	 * 매칭 내역
+	 * @return
+	 */
 	public Response<UserComatchHistoryRes> getHistoryList() {
 		String username = SecurityUtil.getContextUserInfo().getUsername();
 		List<ComatchHistory> comatchHistoryList = comatchHistoryRepository.findByUserInfoUsername(username);
@@ -50,6 +54,11 @@ public class HistoryService {
 		return Response.ok(res);
 	}
 
+	/**
+	 * 매칭 내역에 대한 피드백 추가, pickMe 추가 + 1, csv 반영
+	 * @param req : 매칭 내역 idx, 피드백 점수
+	 * @return
+	 */
 	@Transactional
 	public Response writeFeedback(FeedbackReq req) {
 		ComatchHistory history = comatchHistoryRepository.findById(req.getHistoryId()).orElseThrow(
