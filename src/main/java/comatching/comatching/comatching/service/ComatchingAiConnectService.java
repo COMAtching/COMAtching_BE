@@ -1,7 +1,6 @@
 package comatching.comatching.comatching.service;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
@@ -28,6 +27,10 @@ public class ComatchingAiConnectService {
 		this.userInfoRepository = userInfoRepository;
 	}
 
+	/**
+	 * AI를 실행 후 프롬프트의 결과 값을 인식(사용자 uuid)
+	 * @return : 결과로 나온 사용자의 결과창에 필요한 정보
+	 */
 	public synchronized MatchRes requestMatch() {
 		String enemyUsername;
 
@@ -36,20 +39,10 @@ public class ComatchingAiConnectService {
 
 			process.waitFor();
 			BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-			BufferedReader br = new BufferedReader(new FileReader(resultPath));
 
-			String enemyUsernameBr = br.readLine();
-
-			// readLine 메서드를 사용하여 파일의 첫 줄을 읽습니다
-			String line;
-
-			//reader.readLine();
 			enemyUsername = reader.readLine();
-			System.out.println("[AIConnectService] - match readerBuffer =" + enemyUsername);
-			System.out.println("[AIConnectService] - match resultFile =" + enemyUsernameBr);
 
 		} catch (IOException | InterruptedException e) {
-			System.out.println("[AIConnectService] - match fail..");
 			throw new BusinessException(ResponseCode.AI_FAIL_MATCH);
 		}
 

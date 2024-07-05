@@ -1,21 +1,21 @@
 package comatching.comatching.comatching.service;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.springframework.stereotype.Component;
 
+import comatching.comatching.comatching.dto.RequestMapDto;
 import comatching.comatching.comatching.enums.ReqState;
 import comatching.comatching.util.ResponseCode;
-import comatching.comatching.comatching.dto.RequestMapDto;
 import comatching.comatching.util.exception.BusinessException;
 
 @Component
 public class ComatchingRequestHandler {
-	private HashMap<String, RequestMapDto> reqMap = new HashMap<String, RequestMapDto>();
+	private Map<String, RequestMapDto> reqMap = new ConcurrentHashMap<>();
 
 	public String generateMatchCode(String username) {
 		removeSchedule();
@@ -31,11 +31,10 @@ public class ComatchingRequestHandler {
 		while (iterator.hasNext()) {
 			Map.Entry<String, RequestMapDto> entry = iterator.next();
 			if (entry.getValue().getUsername().equals(username)) {
-				iterator.remove(); // 현재 요소를 안전하게 제거
+				iterator.remove();
 			}
 		}
 		reqMap.put(newCode, requestMapDto);
-		printMap();
 		return newCode;
 	}
 
@@ -44,7 +43,7 @@ public class ComatchingRequestHandler {
 		if (reqMap.containsKey(code)) {
 			RequestMapDto dto = reqMap.get(code);
 			dto.setReqState(ReqState.VALID);
-			printMap();
+			//printMap();
 			return dto.getUsername();
 		} else {
 			throw new BusinessException(ResponseCode.MATCH_CODE_NOT_FOUND);
@@ -56,7 +55,7 @@ public class ComatchingRequestHandler {
 		removeSchedule();
 		if (reqMap.containsKey(matchCode)) {
 			reqMap.get(matchCode).setRegisterTime(LocalDateTime.now());
-			printMap();
+			//printMap();
 		} else {
 			System.out.println("[Match] - 결과 응답후 날짜 업데이트 안됨!");
 		}
@@ -81,11 +80,7 @@ public class ComatchingRequestHandler {
 				iterator.remove();
 			}
 		}
-
-		System.out.println("[ComatchRequestHandler] - 10분 후 항목을 제거했습니다");
-		printMap();
 	}
-
 
 	public void printMap() {
 		int i = 0;

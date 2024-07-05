@@ -5,17 +5,17 @@ import org.springframework.stereotype.Service;
 import comatching.comatching.Feedback.entity.Feedback;
 import comatching.comatching.Feedback.enums.FeedbackState;
 import comatching.comatching.Feedback.repository.FeedbackRepository;
-import comatching.comatching.point.entity.PointHistory;
-import comatching.comatching.point.enums.PointHistoryType;
-import comatching.comatching.point.repository.PointHistoryRepository;
-import comatching.comatching.user.repository.UserInfoRepository;
-import comatching.comatching.util.ResponseCode;
 import comatching.comatching.comatching.dto.MatchReq;
 import comatching.comatching.comatching.dto.MatchRes;
 import comatching.comatching.comatching.entity.ComatchHistory;
 import comatching.comatching.comatching.repository.ComatchHistoryRepository;
+import comatching.comatching.point.entity.PointHistory;
+import comatching.comatching.point.enums.PointHistoryType;
+import comatching.comatching.point.repository.PointHistoryRepository;
 import comatching.comatching.process_ai.CSVHandler;
 import comatching.comatching.user.entity.UserInfo;
+import comatching.comatching.user.repository.UserInfoRepository;
+import comatching.comatching.util.ResponseCode;
 import comatching.comatching.util.exception.BusinessException;
 import jakarta.transaction.Transactional;
 
@@ -44,6 +44,13 @@ public class ComatchingMemberService {
 		return userInfoRepository.findByUsername(username).getPoint();
 	}
 
+	/**
+	 * 매칭 요청에 대한 포인트, pickMe 기회 계산 & 매칭,포인트 history 생성
+	 * @Autthor : greensnapback0229
+	 * @param req : 매칭 피처
+	 * @param res : 매칭 응답
+	 * @param pickerUsername : 뽑은 유저 이름
+	 */
 	@Transactional
 	public void requestMatch(MatchReq req, MatchRes res, String pickerUsername) {
 		UserInfo enemyInfo = userInfoRepository.findByUsername(res.getEnemyUsername());
