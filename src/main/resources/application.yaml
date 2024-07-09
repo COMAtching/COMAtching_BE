@@ -1,9 +1,11 @@
 spring:
   profiles:
     active:
-      - dev
+      - prod
 
     group:
+      prod2:
+        - prod2
       prod:
         - prod
 
