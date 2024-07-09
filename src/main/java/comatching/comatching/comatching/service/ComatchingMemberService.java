@@ -50,6 +50,7 @@ public class ComatchingMemberService {
 	 * @param req : 매칭 피처
 	 * @param res : 매칭 응답
 	 * @param pickerUsername : 뽑은 유저 이름
+	 * Todo : 매칭 되고 pickMe 0되면 삭제
 	 */
 	@Transactional
 	public void requestMatch(MatchReq req, MatchRes res, String pickerUsername) {
